@@ -1,9 +1,9 @@
-require './broker'
+require 'celluloid'
+require './broker_supervision_group'
 require './pusher'
 require './subscriber'
 
-broker = ZmqBroker.new
-broker.async.run
+BrokerSupervisionGroup.run!
 
 subscriber1 = ZmqSubscriber.new name: 'client 1'
 subscriber2 = ZmqSubscriber.new name: 'client 2'

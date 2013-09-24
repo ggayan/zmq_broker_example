@@ -16,6 +16,8 @@ class ZmqBroker
     begin
       @pull_socket.bind pull_addr
       @pub_socket.bind pub_addr
+
+      async.run
     rescue IOError
       close_sockets
       raise
