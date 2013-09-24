@@ -30,5 +30,7 @@ class ZmqBroker
     params = Oj.load(message)
     puts "#{@name}: publishing message #{message}"
     @pub_socket.write params["channel"], params["body"]
+  rescue Oj::ParseError
+    puts "#{@name}: couldn't parse message: #{message}"
   end
 end
