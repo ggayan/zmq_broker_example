@@ -6,6 +6,8 @@ Celluloid::ZMQ.init
 class ZmqBroker
   include Celluloid::ZMQ
 
+  finalizer :close_sockets
+
   def initialize(name: 'broker', pull_addr: 'tcp://127.0.0.1:5555', pub_addr: 'tcp://127.0.0.1:5556')
     @name = name
     @pull_socket = PullSocket.new
@@ -15,10 +17,14 @@ class ZmqBroker
       @pull_socket.bind pull_addr
       @pub_socket.bind pub_addr
     rescue IOError
-      @pull_socket.close
-      @pub_socket.close
+      close_sockets
       raise
     end
+  end
+
+  def close_sockets
+    @pull_socket.close
+    @pub_socket.close
   end
 
   def run
